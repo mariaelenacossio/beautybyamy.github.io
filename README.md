@@ -1,10 +1,31 @@
-# Website Project
+💅 Beauty by Amy – Nail Salon Website
+Overview:
+"Beauty by Amy" is a sleek, responsive website crafted for a fictional nail salon, showcasing modern design aesthetics and user-friendly navigation. Developed as part of a digital design curriculum, this project emphasizes clean layouts, intuitive user experience, and a vibrant visual appeal tailored for beauty industry clientele.
 
-This is your remote repository for your website project. All the instructions are availble in BBL.
+Key Features:
 
-1. Clone your remote GitHub repository onto your local machine using GitHub Desktop. There are no files besides the readme file in this repository.
-2. Publish your repository as a website.
-3. Code your website. The instructions provide a suggested timeline for coding. Commit the in-progress coding to the local repository regularly. Push your commits to GitHub any time you’ve made significant progress.
-5. Add comments to highlight features and decisions.
-6. Validate your work (both HTML and CSS) and fix bugs (don't forget to take screenshots of the final validation).
-7. Test your website as detailed in the intructions and fix any issues (don't forget to take screenshots of the final testing).
+Responsive Design: Ensures optimal viewing across devices, from desktops to smartphones.
+
+Service Showcase: Highlights various nail services with detailed descriptions and pricing.
+
+Client Testimonials: Features authentic-sounding reviews to build trust and credibility.
+
+Contact & Booking: Simplified forms for appointments and newsletter subscriptions.
+
+Technologies Used:
+
+HTML5 & CSS3: Structured and styled the website with semantic markup and modern CSS techniques.
+
+JavaScript: Added interactivity and dynamic content loading.
+
+GitHub Pages: Deployed the site for live preview and accessibility.
+
+Project Highlights:
+
+Emphasis on a clean, modern aesthetic suitable for beauty and wellness brands.
+
+Focused on creating an intuitive user journey from landing page to booking.
+
+Implemented best practices in responsive design and accessibility.
+
+Note: This project was developed for educational purposes and is not affiliated with an actual business.
