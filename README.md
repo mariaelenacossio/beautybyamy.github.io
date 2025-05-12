@@ -1,31 +1,31 @@
-💅 Beauty by Amy – Nail Salon Website
-Overview:
-"Beauty by Amy" is a sleek, responsive website crafted for a fictional nail salon, showcasing modern design aesthetics and user-friendly navigation. Developed as part of a digital design curriculum, this project emphasizes clean layouts, intuitive user experience, and a vibrant visual appeal tailored for beauty industry clientele.
+# 💅 Beauty by Amy – Nail Salon Website
 
-Key Features:
+**Live Site:** [Beauty by Amy](https://mariaelenacossio.github.io/beautybyamy.github.io/)
 
-Responsive Design: Ensures optimal viewing across devices, from desktops to smartphones.
+## 🌟 Overview  
+**Beauty by Amy** is a sleek, responsive website designed for a fictional nail salon, showcasing modern design aesthetics and user-friendly navigation. Developed as part of a digital design curriculum, this project emphasizes clean layouts, intuitive UX, and vibrant visuals tailored for beauty industry clientele.
 
-Service Showcase: Highlights various nail services with detailed descriptions and pricing.
+---
 
-Client Testimonials: Features authentic-sounding reviews to build trust and credibility.
+## ✨ Key Features
+- **Responsive Design** – Optimized for desktop, tablet, and mobile devices.
+- **Service Showcase** – Displays nail services with descriptions and pricing.
+- **Client Testimonials** – Adds credibility with authentic-style reviews.
+- **Contact & Booking** – Simple form for appointments and newsletter signup.
 
-Contact & Booking: Simplified forms for appointments and newsletter subscriptions.
+---
 
-Technologies Used:
+## 🛠 Technologies Used
+- **HTML5 & CSS3** – Semantic structure and modern styling.
+- **JavaScript** – For interactive elements and smooth user experience.
+- **GitHub Pages** – For deployment and live preview.
 
-HTML5 & CSS3: Structured and styled the website with semantic markup and modern CSS techniques.
+---
 
-JavaScript: Added interactivity and dynamic content loading.
+## 💡 Project Highlights
+- Designed with beauty and wellness in mind.
+- Focused on a smooth user journey from landing to booking.
+- Accessibility-conscious and mobile-friendly.
 
-GitHub Pages: Deployed the site for live preview and accessibility.
+> ⚠️ **Note:** This website was created for educational purposes and is not affiliated with an actual business.
 
-Project Highlights:
-
-Emphasis on a clean, modern aesthetic suitable for beauty and wellness brands.
-
-Focused on creating an intuitive user journey from landing page to booking.
-
-Implemented best practices in responsive design and accessibility.
-
-Note: This project was developed for educational purposes and is not affiliated with an actual business.
