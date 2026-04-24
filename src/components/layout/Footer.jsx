@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Instagram, MapPin, Phone, Mail, Heart } from 'lucide-react'
 
+const BASE = import.meta.env.BASE_URL
+
 export default function Footer({ onBookNow }) {
   return (
     <footer className="bg-gray-50 dark:bg-[#0a0608] border-t border-gray-100 dark:border-white/10">
@@ -9,7 +11,7 @@ export default function Footer({ onBookNow }) {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/images/Amys-logo.png" alt="Beauty by Amy" className="h-10 w-auto" />
+              <img src={`${BASE}images/Amys-logo.png`} alt="Beauty by Amy" className="h-10 w-auto" />
               <span className="font-display text-xl text-gray-900 dark:text-white">
                 Beauty <span className="text-brand-500">by Amy</span>
               </span>

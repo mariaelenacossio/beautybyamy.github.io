@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+
+const BASE = import.meta.env.BASE_URL
 import { Instagram, Calendar, Heart, Award, Sparkles, Shield } from 'lucide-react'
 import AnimatedSection from '../components/ui/AnimatedSection'
 import Button from '../components/ui/Button'
@@ -66,7 +68,7 @@ export default function About() {
                   className="relative z-10"
                 >
                   <img
-                    src="/images/Amy-profile.png"
+                    src={`${BASE}images/Amy-profile.png`}
                     alt="Amy — Nail Technician & Beauty Specialist"
                     className="w-full rounded-3xl shadow-2xl shadow-brand-200/40 dark:shadow-brand-900/40"
                   />

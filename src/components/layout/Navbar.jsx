@@ -5,6 +5,8 @@ import { Menu, X, Calendar } from 'lucide-react'
 import ThemeToggle from '../ui/ThemeToggle'
 import Button from '../ui/Button'
 
+const BASE = import.meta.env.BASE_URL
+
 const NAV_LINKS = [
   { to: '/',         label: 'Home'     },
   { to: '/services', label: 'Services' },
@@ -44,7 +46,7 @@ export default function Navbar({ onBookNow }) {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
             <img
-              src="/images/Amys-logo.png"
+              src={`${BASE}images/Amys-logo.png`}
               alt="Beauty by Amy"
               className="h-10 w-auto transition-transform duration-200 group-hover:scale-105"
             />

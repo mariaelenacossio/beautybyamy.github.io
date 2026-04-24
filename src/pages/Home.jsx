@@ -14,18 +14,20 @@ const STATS = [
   { icon: Sparkles, value: '100%', label: 'Satisfaction Rate' },
 ]
 
+const BASE = import.meta.env.BASE_URL
+
 const TESTIMONIALS = [
   {
     name: 'Denisse C.', quote: 'Beyond gorgeous. Very modern and clean. Amy is the best nail technician I\'ve ever had.',
-    img: '/images/img-1.png', link: 'https://www.instagram.com/p/CZctmlZPkR9/',
+    img: `${BASE}images/img-1.png`, link: 'https://www.instagram.com/p/CZctmlZPkR9/',
   },
   {
     name: 'Luisa A.', quote: 'Every visit is always a wonderful experience. She creates the most beautiful designs.',
-    img: '/images/img-2.png', link: 'https://www.instagram.com/p/CZcthIePoOd/',
+    img: `${BASE}images/img-2.png`, link: 'https://www.instagram.com/p/CZcthIePoOd/',
   },
   {
     name: 'Mariaelena C.', quote: 'Best nail technician in the state. I will never go anywhere else ever again.',
-    img: '/images/Nails-5.png', link: 'https://www.instagram.com/p/CKRyVUml2ib/',
+    img: `${BASE}images/Nails-5.png`, link: 'https://www.instagram.com/p/CKRyVUml2ib/',
   },
 ]
 
@@ -45,7 +47,7 @@ export default function Home() {
         {/* Video background */}
         <div className="absolute inset-0 z-0">
           <video
-            src="/images/AmyBanner.mp4"
+            src={`${BASE}images/AmyBanner.mp4`}
             autoPlay muted loop playsInline
             className="w-full h-full object-cover"
           />
@@ -227,7 +229,7 @@ export default function Home() {
       {/* ── CTA Banner ────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/BG3-about.jpg" alt="" className="w-full h-full object-cover" />
+          <img src={`${BASE}images/BG3-about.jpg`} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-900/85 to-brand-700/75" />
         </div>
         <div className="relative z-10 container-xl section-padding py-20 text-center">

@@ -6,12 +6,14 @@ import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import BookingModal from '../components/booking/BookingModal'
 
+const BASE = import.meta.env.BASE_URL
+
 const SERVICES_DATA = [
   {
     title: 'Nail Care',
     icon: '💅',
     description: 'Precision-crafted nails using premium products for a flawless, long-lasting finish.',
-    img: '/images/Nails-1.png',
+    img: `${BASE}images/Nails-1.png`,
     instagramLink: 'https://www.instagram.com/p/CTkdAn7nCN6/',
     items: [
       { name: 'Acrylic Fullset',         price: 80,  duration: '90 min', popular: true  },
@@ -24,7 +26,7 @@ const SERVICES_DATA = [
     title: 'Eyelash Extensions',
     icon: '✨',
     description: 'Handcrafted lash sets that open your eyes and elevate your entire look.',
-    video: '/images/eyelashes-1.mp4',
+    video: `${BASE}images/eyelashes-1.mp4`,
     instagramLink: 'https://www.instagram.com/p/CTadPXfvTgA/',
     items: [
       { name: 'Volume Eyelash Set',  price: 300, duration: '2.5 hr', popular: true  },
@@ -37,7 +39,7 @@ const SERVICES_DATA = [
     title: 'Gift Certificates',
     icon: '🎁',
     description: 'Treat someone you love to a luxurious beauty experience — the gift that never misses.',
-    img: '/images/Nails-3.png',
+    img: `${BASE}images/Nails-3.png`,
     instagramLink: 'https://www.instagram.com/p/CO0JQBosF9i/',
     items: [
       { name: 'Nails + Manicure',           price: 100, duration: null, popular: false },
@@ -49,12 +51,12 @@ const SERVICES_DATA = [
 ]
 
 const GALLERY = [
-  { src: '/images/Nails-1.png', alt: 'Acrylic nail art' },
-  { src: '/images/Nails-2.png', alt: 'Nail design' },
-  { src: '/images/Nails-3.png', alt: 'Nail art close-up' },
-  { src: '/images/Nails-4.png', alt: 'Nail design detail' },
-  { src: '/images/Nails-5.png', alt: 'Nail art gallery' },
-  { src: '/images/img-1.png',   alt: 'Client nails' },
+  { src: `${BASE}images/Nails-1.png`, alt: 'Acrylic nail art' },
+  { src: `${BASE}images/Nails-2.png`, alt: 'Nail design' },
+  { src: `${BASE}images/Nails-3.png`, alt: 'Nail art close-up' },
+  { src: `${BASE}images/Nails-4.png`, alt: 'Nail design detail' },
+  { src: `${BASE}images/Nails-5.png`, alt: 'Nail art gallery' },
+  { src: `${BASE}images/img-1.png`,   alt: 'Client nails' },
 ]
 
 export default function Services() {
@@ -65,7 +67,7 @@ export default function Services() {
       {/* ── Hero ───────────────────────────────────────────── */}
       <section className="relative pt-28 pb-16 overflow-hidden bg-gradient-to-b from-brand-50 to-white dark:from-[#130b0d] dark:to-[#0f0a0b]">
         <div className="absolute inset-0 z-0 opacity-20 dark:opacity-10">
-          <video src="/images/video-2.mp4" autoPlay muted loop playsInline className="w-full h-full object-cover" />
+          <video src={`${BASE}images/video-2.mp4`} autoPlay muted loop playsInline className="w-full h-full object-cover" />
         </div>
         <div className="relative z-10 container-xl section-padding text-center">
           <AnimatedSection>

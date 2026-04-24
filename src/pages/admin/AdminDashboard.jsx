@@ -13,6 +13,8 @@ import { useTheme } from '../../context/ThemeContext'
 import Badge from '../../components/ui/Badge'
 import { getCalendarDays, WEEKDAY_LABELS } from '../../utils/dateUtils'
 
+const BASE = import.meta.env.BASE_URL
+
 /* ── Sidebar nav items ───────────────────────── */
 const NAV = [
   { id: 'overview',      icon: LayoutDashboard, label: 'Overview'      },
@@ -62,7 +64,7 @@ export default function AdminDashboard() {
             >
               {/* Logo */}
               <div className="flex items-center gap-3 px-5 py-5 border-b border-gray-100 dark:border-white/10">
-                <img src="/images/Amys-logo.png" alt="Beauty by Amy" className="h-8 w-auto" />
+                <img src={`${BASE}images/Amys-logo.png`} alt="Beauty by Amy" className="h-8 w-auto" />
                 <div>
                   <p className="text-xs font-medium text-gray-900 dark:text-white leading-tight">Beauty by Amy</p>
                   <p className="text-xs text-gray-400 dark:text-gray-500">Admin Panel</p>
