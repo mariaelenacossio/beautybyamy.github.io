@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --scrollbar-thumb: #FFB3C1;
+    --scrollbar-track: #FFF0F3;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply font-body bg-white text-gray-900 antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    @apply bg-[#0f0a0b] text-gray-100;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
+  }
+
+  ::-webkit-scrollbar        { width: 6px; }
+  ::-webkit-scrollbar-track  { background: var(--scrollbar-track); }
+  ::-webkit-scrollbar-thumb  { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+  h1, h2, h3, h4 { @apply font-display; }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-brand-400 ring-offset-2;
+  }
+}
+
+@layer components {
+  .section-padding   { @apply px-4 sm:px-6 lg:px-8; }
+  .container-xl      { @apply max-w-7xl mx-auto; }
+  .glass-card        { @apply bg-white/80 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10; }
+  .gradient-text     { @apply bg-gradient-to-r from-brand-400 to-brand-600 bg-clip-text text-transparent; }
+  .section-title     { @apply font-display text-4xl sm:text-5xl font-light tracking-wide; }
+  .section-subtitle  { @apply font-body text-base sm:text-lg text-gray-500 dark:text-gray-400 font-light; }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .text-balance { text-wrap: balance; }
+}
