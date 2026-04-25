@@ -69,41 +69,39 @@ export default function BookingModal({ isOpen, onClose }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 40 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="relative w-full sm:max-w-xl bg-white dark:bg-[#1a1012] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden"
+        className="relative w-full sm:max-w-xl bg-cream dark:bg-[#120B0C] shadow-2xl overflow-hidden rounded-t-2xl sm:rounded-none"
         style={{ maxHeight: '92dvh' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-white/10">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-editorial/10 dark:border-white/10">
           <div>
-            <p className="font-body text-xs text-brand-500 font-medium uppercase tracking-widest">
-              {confirmed ? 'Booked!' : `Step ${step + 1} of ${STEPS.length}`}
+            <p className="font-body text-[10px] text-brand-600 font-medium uppercase tracking-widest mb-0.5">
+              {confirmed ? 'Confirmed!' : `Step ${step + 1} of ${STEPS.length}`}
             </p>
-            <h2 className="font-display text-2xl text-gray-900 dark:text-white">
-              {confirmed ? 'See you soon! ✨' : STEPS[step]}
+            <h2 className="font-editorial text-2xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">
+              {confirmed ? 'See you soon!' : STEPS[step]}
             </h2>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+            className="p-2 text-editorial/50 hover:text-editorial dark:text-white/40 dark:hover:text-white transition-colors"
             aria-label="Close"
           >
-            <X size={20} className="text-gray-500 dark:text-gray-400" />
+            <X size={18} />
           </button>
         </div>
 
-        {/* Progress bar */}
+        {/* Progress bar — sharp editorial lines */}
         {!confirmed && (
-          <div className="px-6 pt-3">
-            <div className="flex gap-1.5">
-              {STEPS.map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-1 flex-1 rounded-full transition-all duration-500 ${
-                    i <= step ? 'bg-brand-500' : 'bg-gray-100 dark:bg-white/10'
-                  }`}
-                />
-              ))}
-            </div>
+          <div className="flex">
+            {STEPS.map((_, i) => (
+              <div
+                key={i}
+                className={`h-0.5 flex-1 transition-all duration-500 ${
+                  i <= step ? 'bg-brand-600' : 'bg-editorial/10 dark:bg-white/10'
+                }`}
+              />
+            ))}
           </div>
         )}
 
@@ -157,24 +155,24 @@ function ReviewSummary({ booking, onBack, onConfirm }) {
 
   return (
     <>
-      <p className="font-body text-sm text-gray-500 dark:text-gray-400 mb-4">
+      <p className="font-body text-xs text-mid dark:text-[#A09590] mb-5 tracking-wide">
         Please review your booking details before confirming.
       </p>
-      <div className="bg-brand-50 dark:bg-brand-900/20 rounded-2xl overflow-hidden">
+      <div className="border border-editorial/10 dark:border-white/10 overflow-hidden">
         {rows.map(({ label, value }) => (
-          <div key={label} className="flex justify-between px-4 py-3 border-b border-brand-100/50 dark:border-white/5 last:border-0">
-            <span className="font-body text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</span>
-            <span className="font-body text-sm text-gray-900 dark:text-white text-right max-w-[60%]">{value}</span>
+          <div key={label} className="flex justify-between px-5 py-3.5 border-b border-editorial/8 dark:border-white/5 last:border-0">
+            <span className="font-body text-[10px] font-medium text-mid/60 dark:text-[#A09590]/60 uppercase tracking-widest">{label}</span>
+            <span className="font-body text-sm text-editorial dark:text-[#F0EBE8] text-right max-w-[60%]">{value}</span>
           </div>
         ))}
       </div>
-      <p className="font-body text-xs text-gray-400 dark:text-gray-500 mt-3">
-        A confirmation will be sent to <strong>{booking.clientEmail}</strong>
+      <p className="font-body text-xs text-mid/50 dark:text-[#A09590]/50 mt-3">
+        Confirmation will be sent to <strong className="text-editorial dark:text-[#F0EBE8]">{booking.clientEmail}</strong>
       </p>
       <div className="flex gap-3 mt-6">
         <button
           onClick={onBack}
-          className="flex-1 py-3 rounded-full border border-gray-200 dark:border-white/20 font-body text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+          className="flex-1 py-3.5 border border-editorial/15 dark:border-white/15 font-body text-xs font-medium tracking-widest uppercase text-editorial dark:text-[#F0EBE8] hover:border-editorial/30 transition-colors"
         >
           Back
         </button>
@@ -182,7 +180,7 @@ function ReviewSummary({ booking, onBack, onConfirm }) {
           onClick={onConfirm}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex-[2] py-3 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-body font-medium text-sm transition-colors shadow-md hover:shadow-glow"
+          className="flex-[2] py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-body font-medium text-xs tracking-widest uppercase transition-colors"
         >
           Confirm Booking
         </motion.button>

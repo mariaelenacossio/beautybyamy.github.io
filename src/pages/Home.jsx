@@ -1,273 +1,555 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Calendar, Star, Award, Users, ArrowRight, Sparkles } from 'lucide-react'
-import AnimatedSection from '../components/ui/AnimatedSection'
-import Card from '../components/ui/Card'
-import Button from '../components/ui/Button'
+import { ArrowRight, Instagram } from 'lucide-react'
 import BookingModal from '../components/booking/BookingModal'
-
-const STATS = [
-  { icon: Users,  value: '500+', label: 'Happy Clients'      },
-  { icon: Award,  value: '4+',   label: 'Years Experience'   },
-  { icon: Star,   value: '5.0',  label: 'Average Rating'     },
-  { icon: Sparkles, value: '100%', label: 'Satisfaction Rate' },
-]
 
 const BASE = import.meta.env.BASE_URL
 
+/* ─── animation helpers ──────────────────────────────── */
+const fadeUp = (delay = 0) => ({
+  initial:    { opacity: 0, y: 32 },
+  animate:    { opacity: 1, y: 0  },
+  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+})
+
+const staggerContainer = {
+  hidden: {},
+  show:   { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
+}
+const wordReveal = {
+  hidden: { y: '105%', opacity: 0 },
+  show:   { y: '0%', opacity: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+}
+
+function InView({ children, className = '', delay = 0 }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 36 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+/* ─── data ───────────────────────────────────────────── */
+const STATS = [
+  { value: '500+', label: 'Happy Clients'     },
+  { value: '4+',   label: 'Years of Artistry' },
+  { value: '5.0',  label: 'Star Rating'       },
+  { value: '100%', label: 'Satisfaction'       },
+]
+
+const SERVICES_PREVIEW = [
+  {
+    no: '01',
+    title: 'Nail Care',
+    sub: 'Acrylics · Dipping Powder · Refills',
+    from: 'From $55',
+    img: `${BASE}images/Nails-1.png`,
+  },
+  {
+    no: '02',
+    title: 'Eyelash Extensions',
+    sub: 'Classic · Volume Sets · Refills',
+    from: 'From $155',
+    img: `${BASE}images/img-2.png`,
+  },
+  {
+    no: '03',
+    title: 'Gift Certificates',
+    sub: 'For someone you love',
+    from: 'From $100',
+    img: `${BASE}images/Nails-3.png`,
+  },
+]
+
+const GALLERY_IMAGES = [
+  { src: `${BASE}images/Nails-1.png`, alt: 'Nail art' },
+  { src: `${BASE}images/Nails-2.png`, alt: 'Design detail' },
+  { src: `${BASE}images/Nails-4.png`, alt: 'Nail art' },
+  { src: `${BASE}images/Nails-5.png`, alt: 'Nail art' },
+  { src: `${BASE}images/img-1.png`,   alt: 'Client nails' },
+  { src: `${BASE}images/Nails-3.png`, alt: 'Gallery' },
+  { src: `${BASE}images/Nails-1.png`, alt: 'Nail art' },
+  { src: `${BASE}images/Nails-2.png`, alt: 'Design detail' },
+]
+
 const TESTIMONIALS = [
   {
-    name: 'Denisse C.', quote: 'Beyond gorgeous. Very modern and clean. Amy is the best nail technician I\'ve ever had.',
-    img: `${BASE}images/img-1.png`, link: 'https://www.instagram.com/p/CZctmlZPkR9/',
+    name: 'Denisse C.',
+    quote: 'Beyond gorgeous. Very modern and clean. Amy is the best nail technician I\'ve ever had.',
+    img: `${BASE}images/img-1.png`,
   },
   {
-    name: 'Luisa A.', quote: 'Every visit is always a wonderful experience. She creates the most beautiful designs.',
-    img: `${BASE}images/img-2.png`, link: 'https://www.instagram.com/p/CZcthIePoOd/',
+    name: 'Luisa A.',
+    quote: 'Every visit is always a wonderful experience. She creates the most beautiful designs.',
+    img: `${BASE}images/img-2.png`,
   },
   {
-    name: 'Mariaelena C.', quote: 'Best nail technician in the state. I will never go anywhere else ever again.',
-    img: `${BASE}images/Nails-5.png`, link: 'https://www.instagram.com/p/CKRyVUml2ib/',
+    name: 'Mariaelena C.',
+    quote: 'Best nail technician in the state. I will never go anywhere else ever again.',
+    img: `${BASE}images/Nails-5.png`,
   },
 ]
 
-const PREVIEW_SERVICES = [
-  { title: 'Nail Care',        desc: 'Acrylic fullsets, refills & dipping powder — crafted to perfection.', icon: '💅', from: '$55' },
-  { title: 'Eyelash Extensions', desc: 'Classic & volume sets that make your eyes truly unforgettable.',    icon: '✨', from: '$155' },
-  { title: 'Gift Certificates',  desc: 'The perfect gift for someone you love. Redeemable for any service.', icon: '🎁', from: '$100' },
-]
-
+/* ─── component ──────────────────────────────────────── */
 export default function Home() {
   const [bookingOpen, setBookingOpen] = useState(false)
+  const [hoveredService, setHoveredService] = useState(null)
 
   return (
     <>
-      {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Video background */}
-        <div className="absolute inset-0 z-0">
-          <video
-            src={`${BASE}images/AmyBanner.mp4`}
-            autoPlay muted loop playsInline
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        </div>
+      {/* ══════════════════════════════════════════
+          HERO — editorial asymmetric grid
+      ══════════════════════════════════════════ */}
+      <section className="relative h-screen min-h-[600px] border-b border-editorial/10 dark:border-white/8">
+        {/* Desktop: 3-col grid */}
+        <div className="hidden lg:grid h-full" style={{ gridTemplateColumns: '2fr 1.15fr 1.4fr' }}>
 
-        <div className="relative z-10 container-xl section-padding pt-24 pb-16">
-          <div className="max-w-2xl">
+          {/* ── Col 1: large media panel with staggered word overlay ── */}
+          <div className="relative overflow-hidden border-r border-editorial/10 dark:border-white/8">
+            <video
+              src={`${BASE}images/AmyBanner.mp4`}
+              autoPlay muted loop playsInline
+              className="absolute inset-0 w-full h-full object-cover scale-105"
+            />
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-editorial/20 via-editorial/10 to-editorial/60" />
+
+            {/* Staggered editorial words */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6"
+              variants={staggerContainer}
+              initial="hidden"
+              animate="show"
+              className="absolute inset-0 flex flex-col justify-between p-10 pt-28 pb-12"
             >
-              <span className="text-xs font-body text-white/80 tracking-wide">
-                ✦ Nail Artistry & Eyelash Extensions — Fairfax, VA
-              </span>
+              <div className="overflow-hidden">
+                <motion.span variants={wordReveal} className="block font-editorial text-[clamp(4rem,7vw,7rem)] leading-none text-white/90 tracking-wide uppercase">
+                  BEAUTY
+                </motion.span>
+              </div>
+              <div className="overflow-hidden self-center">
+                <motion.span variants={wordReveal} className="block font-editorial text-[clamp(3rem,5vw,5rem)] leading-none text-white/70 tracking-widest uppercase italic font-display">
+                  by Amy
+                </motion.span>
+              </div>
+              <div className="overflow-hidden self-end">
+                <motion.span variants={wordReveal} className="block font-editorial text-[clamp(3.5rem,6vw,6.5rem)] leading-none text-white/90 tracking-wide uppercase">
+                  NAILS
+                </motion.span>
+              </div>
             </motion.div>
+          </div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-light text-white leading-tight mb-6"
-            >
-              Having your nails done
-              <span className="block italic text-brand-300">is self-care.</span>
-            </motion.h1>
+          {/* ── Col 2: two stacked image panels ── */}
+          <div className="grid border-r border-editorial/10 dark:border-white/8" style={{ gridTemplateRows: '55% 45%' }}>
+            {/* Top: nail close-up */}
+            <div className="relative overflow-hidden border-b border-editorial/10 dark:border-white/8 group">
+              <motion.img
+                src={`${BASE}images/Nails-1.png`}
+                alt="Nail art"
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.9, delay: 0.3 }}
+              />
+              {/* "NEW LOOK" chip */}
+              <motion.div
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+                className="absolute bottom-4 right-4 flex items-center gap-2 bg-brand-600 text-white px-4 py-2"
+              >
+                <span className="font-body text-[10px] font-bold tracking-widest uppercase">New Looks</span>
+                <ArrowRight size={10} />
+              </motion.div>
+            </div>
 
+            {/* Bottom: Amy profile */}
+            <div className="relative overflow-hidden group">
+              <motion.img
+                src={`${BASE}images/Amy-profile.png`}
+                alt="Amy — nail technician"
+                className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.9, delay: 0.5 }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-editorial/30 to-transparent" />
+              {/* "Summer Euphoria Look" label */}
+              <div className="absolute bottom-4 left-4">
+                <p className="font-body text-[10px] text-white/80 tracking-widest uppercase font-medium">Nail Artistry</p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Col 3: cream text panel ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="flex flex-col justify-between bg-cream dark:bg-[#0D0808] p-10 pt-24"
+          >
+            {/* Top label */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="font-body text-lg text-white/75 mb-8 leading-relaxed"
+              transition={{ delay: 0.8 }}
+              className="editorial-label text-brand-600"
             >
-              Premium nail art and eyelash extensions, designed just for you.
-              Book your appointment and transform how you feel — inside and out.
+              Style is for all
             </motion.p>
 
+            {/* Brand name */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <h1 className="font-editorial text-[clamp(3.5rem,5.5vw,5.5rem)] leading-[0.9] tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">
+                  BEAUTY<br />
+                  <span className="font-display italic font-light text-[clamp(2.5rem,4vw,4rem)] tracking-normal text-brand-600">
+                    by Amy
+                  </span>
+                  <br />
+                  NAIL<br />STUDIO
+                </h1>
+              </motion.div>
+            </div>
+
+            {/* Tagline + CTA */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.65 }}
-              className="flex flex-wrap gap-3"
+              transition={{ delay: 1, duration: 0.6 }}
+              className="space-y-6"
             >
-              <Button size="lg" onClick={() => setBookingOpen(true)} icon={<Calendar size={18} />}>
-                Book Appointment
-              </Button>
-              <Button variant="white" size="lg">
-                <Link to="/services" className="flex items-center gap-2">
-                  View Services <ArrowRight size={16} />
+              <p className="font-body text-sm text-mid dark:text-[#A09590] leading-relaxed">
+                Premium nail artistry and eyelash extensions crafted with care, delivered with love — in Fairfax, Virginia.
+              </p>
+              <div className="flex flex-col gap-3">
+                <motion.button
+                  onClick={() => setBookingOpen(true)}
+                  whileHover={{ x: 4 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group flex items-center justify-between w-full bg-brand-600 hover:bg-brand-700 text-white px-6 py-4 transition-colors duration-200"
+                >
+                  <span className="font-body text-sm font-medium tracking-widest uppercase">Book Now</span>
+                  <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
+                </motion.button>
+                <Link
+                  to="/services"
+                  className="group flex items-center justify-between w-full border border-editorial/15 dark:border-white/10 text-editorial dark:text-[#F0EBE8] px-6 py-4 hover:border-editorial/40 transition-colors duration-200"
+                >
+                  <span className="font-body text-sm font-medium tracking-widest uppercase">View Services</span>
+                  <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
                 </Link>
-              </Button>
+              </div>
+              <div className="flex items-center gap-4 pt-2">
+                <a
+                  href="https://www.instagram.com/beautybyamy000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-mid dark:text-[#A09590] hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                >
+                  <Instagram size={14} />
+                  <span className="font-body text-[11px] tracking-widest uppercase">@beautybyamy000</span>
+                </a>
+              </div>
             </motion.div>
+          </motion.div>
+        </div>
+
+        {/* ── Mobile hero (stacked) ── */}
+        <div className="lg:hidden relative h-full flex flex-col">
+          {/* Media */}
+          <div className="relative flex-1 overflow-hidden">
+            <video
+              src={`${BASE}images/AmyBanner.mp4`}
+              autoPlay muted loop playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-editorial/10 via-transparent to-editorial/80" />
+            {/* Overlay text */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 pb-32">
+              <p className="editorial-label mb-2">Style is for all</p>
+              <h1 className="font-editorial text-6xl leading-none tracking-wide uppercase text-white">
+                BEAUTY<br />
+                <span className="font-display italic font-light text-4xl text-brand-300">by Amy</span><br />
+                NAILS
+              </h1>
+            </div>
           </div>
-        </div>
-
-        {/* Scroll hint */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 1.8 }}
-            className="w-px h-12 bg-gradient-to-b from-white/0 via-white/50 to-white/0"
-          />
-        </motion.div>
-      </section>
-
-      {/* ── Stats ─────────────────────────────────────────── */}
-      <section className="bg-white dark:bg-[#0f0a0b] border-y border-gray-100 dark:border-white/10">
-        <div className="container-xl section-padding py-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10">
-            {STATS.map(({ icon: Icon, value, label }, i) => (
-              <AnimatedSection key={label} delay={i * 0.1}>
-                <div className="flex flex-col items-center text-center gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center">
-                    <Icon size={18} className="text-brand-600 dark:text-brand-400" />
-                  </div>
-                  <span className="font-display text-3xl sm:text-4xl text-gray-900 dark:text-white">{value}</span>
-                  <span className="font-body text-sm text-gray-500 dark:text-gray-400">{label}</span>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Services Preview ──────────────────────────────── */}
-      <section className="py-20 lg:py-28 bg-brand-50/50 dark:bg-[#130b0d]">
-        <div className="container-xl section-padding">
-          <AnimatedSection className="text-center mb-14">
-            <p className="font-body text-sm text-brand-500 font-medium tracking-widest uppercase mb-3">What I Offer</p>
-            <h2 className="section-title text-gray-900 dark:text-white mb-4">Services made for you</h2>
-            <p className="section-subtitle max-w-md mx-auto">
-              Whether it's stunning nail art or fluttery lashes, every appointment is tailored to you.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PREVIEW_SERVICES.map((svc, i) => (
-              <AnimatedSection key={svc.title} delay={i * 0.1}>
-                <Card className="h-full text-center group hover:border-brand-200 dark:hover:border-brand-700/50 transition-colors">
-                  <div className="flex flex-col items-center gap-4">
-                    <motion.span
-                      className="text-4xl"
-                      whileHover={{ scale: 1.2, rotate: 5 }}
-                      transition={{ type: 'spring', stiffness: 400 }}
-                    >
-                      {svc.icon}
-                    </motion.span>
-                    <h3 className="font-display text-xl text-gray-900 dark:text-white">{svc.title}</h3>
-                    <p className="font-body text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{svc.desc}</p>
-                    <div className="flex items-center justify-between w-full pt-3 border-t border-gray-100 dark:border-white/10">
-                      <span className="font-body text-xs text-gray-400">Starting from</span>
-                      <span className="font-display text-lg text-brand-600 dark:text-brand-400">{svc.from}</span>
-                    </div>
-                  </div>
-                </Card>
-              </AnimatedSection>
-            ))}
-          </div>
-
-          <AnimatedSection delay={0.4} className="text-center mt-10">
-            <Link to="/services">
-              <Button variant="outline" size="lg">
-                See Full Price List <ArrowRight size={16} />
-              </Button>
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ── Testimonials ──────────────────────────────────── */}
-      <section className="py-20 lg:py-28 bg-white dark:bg-[#0f0a0b]">
-        <div className="container-xl section-padding">
-          <AnimatedSection className="text-center mb-14">
-            <p className="font-body text-sm text-brand-500 font-medium tracking-widest uppercase mb-3">Client Love</p>
-            <h2 className="section-title text-gray-900 dark:text-white">What my clients say</h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map(({ name, quote, img, link }, i) => (
-              <AnimatedSection key={name} delay={i * 0.1}>
-                <Card className="flex flex-col gap-5">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, j) => (
-                      <Star key={j} size={14} className="fill-brand-400 text-brand-400" />
-                    ))}
-                  </div>
-                  <p className="font-body text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic">
-                    "{quote}"
-                  </p>
-                  <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-100 dark:border-white/10">
-                    <a href={link} target="_blank" rel="noopener noreferrer">
-                      <motion.img
-                        whileHover={{ scale: 1.05 }}
-                        src={img}
-                        alt={`${name}'s nails`}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-brand-200"
-                      />
-                    </a>
-                    <div>
-                      <p className="font-body text-sm font-semibold text-gray-800 dark:text-gray-200">{name}</p>
-                      <p className="font-body text-xs text-gray-400">Verified Client</p>
-                    </div>
-                  </div>
-                </Card>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA Banner ────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={`${BASE}images/BG3-about.jpg`} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-900/85 to-brand-700/75" />
-        </div>
-        <div className="relative z-10 container-xl section-padding py-20 text-center">
-          <AnimatedSection>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-white font-light mb-4">
-              Ready for your<br /><span className="italic text-brand-300">dream nails?</span>
-            </h2>
-            <p className="font-body text-white/70 text-lg mb-8 max-w-md mx-auto">
-              Book your appointment in under 2 minutes — no calls, no waiting.
-            </p>
-            <Button size="xl" variant="white" onClick={() => setBookingOpen(true)} icon={<Calendar size={20} />}>
-              Book Now
-            </Button>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ── Newsletter ────────────────────────────────────── */}
-      <section className="py-14 bg-brand-600 dark:bg-brand-800">
-        <div className="container-xl section-padding">
-          <AnimatedSection className="max-w-xl mx-auto text-center">
-            <h3 className="font-display text-3xl text-white mb-2">Stay in the loop</h3>
-            <p className="font-body text-white/70 text-sm mb-6">
-              Get exclusive offers, nail inspo & appointment reminders.
-            </p>
-            <form
-              onSubmit={e => e.preventDefault()}
-              className="flex gap-2 flex-col sm:flex-row"
+          {/* CTA strip */}
+          <div className="bg-cream dark:bg-[#0D0808] px-6 py-6 flex gap-3 border-t border-editorial/10">
+            <button
+              onClick={() => setBookingOpen(true)}
+              className="flex-1 bg-brand-600 text-white font-body text-xs font-medium tracking-widest uppercase py-4 hover:bg-brand-700 transition-colors"
             >
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/50 font-body text-sm focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm"
-              />
-              <Button variant="white" type="submit">Subscribe</Button>
-            </form>
-          </AnimatedSection>
+              Book Now
+            </button>
+            <Link
+              to="/services"
+              className="flex-1 border border-editorial/15 text-editorial dark:text-[#F0EBE8] dark:border-white/10 font-body text-xs font-medium tracking-widest uppercase py-4 text-center hover:border-editorial/40 transition-colors"
+            >
+              Services
+            </Link>
+          </div>
         </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          STATS MARQUEE
+      ══════════════════════════════════════════ */}
+      <section className="border-b border-editorial/10 dark:border-white/8 overflow-hidden bg-brand-600">
+        <div className="flex animate-marquee whitespace-nowrap py-4">
+          {[...STATS, ...STATS, ...STATS, ...STATS].map((s, i) => (
+            <div key={i} className="inline-flex items-center gap-8 px-10">
+              <span className="font-editorial text-2xl tracking-widest text-white">{s.value}</span>
+              <span className="font-body text-[10px] tracking-widest uppercase text-white/70">{s.label}</span>
+              <span className="text-white/30 text-lg">·</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SERVICES PREVIEW — editorial list
+      ══════════════════════════════════════════ */}
+      <section className="border-b border-editorial/10 dark:border-white/8">
+        <div className="container-xl section-padding">
+          {/* Header */}
+          <InView className="flex items-end justify-between py-12 border-b border-editorial/10 dark:border-white/8">
+            <div>
+              <p className="editorial-label mb-3">What we do</p>
+              <h2 className="font-editorial text-5xl sm:text-6xl lg:text-7xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">
+                Services
+              </h2>
+            </div>
+            <Link
+              to="/services"
+              className="hidden sm:flex items-center gap-2 font-body text-xs tracking-widest uppercase text-mid hover:text-brand-600 dark:text-[#A09590] dark:hover:text-brand-400 transition-colors group"
+            >
+              View all
+              <ArrowRight size={12} className="transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+          </InView>
+
+          {/* Services list */}
+          <div>
+            {SERVICES_PREVIEW.map((svc, i) => (
+              <InView key={svc.no} delay={i * 0.08}>
+                <motion.div
+                  className="group grid grid-cols-12 items-center gap-6 py-8 border-b border-editorial/10 dark:border-white/8 cursor-pointer"
+                  onHoverStart={() => setHoveredService(i)}
+                  onHoverEnd={() => setHoveredService(null)}
+                  whileHover={{ x: 6 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  onClick={() => setBookingOpen(true)}
+                >
+                  {/* Number */}
+                  <div className="col-span-1">
+                    <span className="font-body text-xs text-mid/50 dark:text-[#A09590]/50">{svc.no}</span>
+                  </div>
+                  {/* Title */}
+                  <div className="col-span-5 sm:col-span-4">
+                    <h3 className="font-editorial text-3xl sm:text-4xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors duration-300">
+                      {svc.title}
+                    </h3>
+                  </div>
+                  {/* Sub */}
+                  <div className="hidden sm:block col-span-3">
+                    <p className="font-body text-xs text-mid dark:text-[#A09590] tracking-wide">{svc.sub}</p>
+                  </div>
+                  {/* Price */}
+                  <div className="col-span-3 sm:col-span-2">
+                    <span className="font-body text-sm font-medium text-editorial dark:text-[#F0EBE8]">{svc.from}</span>
+                  </div>
+                  {/* Arrow */}
+                  <div className="col-span-3 sm:col-span-2 flex justify-end">
+                    <AnimatePresence>
+                      {hoveredService === i && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 8 }}
+                          className="flex items-center gap-2 bg-brand-600 text-white px-4 py-2"
+                        >
+                          <span className="font-body text-[10px] tracking-widest uppercase font-medium">Book</span>
+                          <ArrowRight size={10} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    {hoveredService !== i && (
+                      <ArrowRight size={16} className="text-editorial/30 dark:text-white/20 group-hover:text-brand-600 transition-colors duration-200" />
+                    )}
+                  </div>
+                </motion.div>
+              </InView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          GALLERY — horizontal scroll strip
+      ══════════════════════════════════════════ */}
+      <section className="border-b border-editorial/10 dark:border-white/8 py-16">
+        <InView className="container-xl section-padding mb-8 flex items-end justify-between">
+          <div>
+            <p className="editorial-label mb-2">Our work</p>
+            <h2 className="font-editorial text-4xl sm:text-5xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">
+              Gallery
+            </h2>
+          </div>
+          <a
+            href="https://www.instagram.com/beautybyamy000"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-2 font-body text-xs tracking-widest uppercase text-mid hover:text-brand-600 dark:text-[#A09590] dark:hover:text-brand-400 transition-colors group"
+          >
+            <Instagram size={13} />
+            Instagram
+          </a>
+        </InView>
+
+        {/* Scrollable image strip */}
+        <div className="overflow-x-auto no-scrollbar px-5 sm:px-8 lg:px-12">
+          <div className="flex gap-3 w-max">
+            {GALLERY_IMAGES.map((img, i) => (
+              <motion.div
+                key={i}
+                className="relative overflow-hidden shrink-0 group"
+                style={{ width: 'clamp(200px, 22vw, 320px)', height: 'clamp(260px, 28vw, 400px)' }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.06 }}
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                {/* Hover overlay */}
+                <motion.div
+                  className="absolute inset-0 bg-brand-600/0 group-hover:bg-brand-600/20 transition-colors duration-300 flex items-end p-4"
+                >
+                  <span className="font-body text-[10px] text-white tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">
+                    {img.alt}
+                  </span>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          BIG RED CTA BLOCK
+      ══════════════════════════════════════════ */}
+      <section className="border-b border-editorial/10 dark:border-white/8">
+        <InView className="relative overflow-hidden bg-brand-600">
+          {/* Background image */}
+          <img
+            src={`${BASE}images/BG3-about.jpg`}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-multiply"
+          />
+          <div className="relative z-10 container-xl section-padding py-20 sm:py-28">
+            <div className="max-w-4xl">
+              <p className="font-body text-xs text-white/60 tracking-widest uppercase mb-6">Ready?</p>
+              <h2 className="font-editorial text-[clamp(3.5rem,8vw,8rem)] leading-none tracking-wide uppercase text-white mb-10">
+                BOOK YOUR<br />
+                <span className="font-display italic font-light text-white/80 text-[clamp(2rem,5vw,5rem)]">dream nails</span>
+              </h2>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <motion.button
+                  onClick={() => setBookingOpen(true)}
+                  whileHover={{ backgroundColor: '#FAF7F4', color: '#C8102E' }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group flex items-center justify-between sm:justify-center gap-4 bg-white text-brand-600 px-10 py-5 font-body text-sm font-medium tracking-widest uppercase transition-colors duration-200"
+                >
+                  Book Appointment
+                  <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
+                </motion.button>
+                <Link
+                  to="/services"
+                  className="group flex items-center justify-between sm:justify-center gap-4 border border-white/40 hover:border-white text-white px-10 py-5 font-body text-sm font-medium tracking-widest uppercase transition-colors duration-200"
+                >
+                  See Services
+                  <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </InView>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          TESTIMONIALS
+      ══════════════════════════════════════════ */}
+      <section className="border-b border-editorial/10 dark:border-white/8 py-16 sm:py-24">
+        <div className="container-xl section-padding">
+          <InView className="mb-12">
+            <p className="editorial-label mb-3">What clients say</p>
+            <h2 className="font-editorial text-4xl sm:text-5xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">
+              Testimonials
+            </h2>
+          </InView>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-editorial/10 dark:border-white/8">
+            {TESTIMONIALS.map((t, i) => (
+              <InView
+                key={t.name}
+                delay={i * 0.1}
+                className={`p-8 sm:p-10 ${i < TESTIMONIALS.length - 1 ? 'border-b md:border-b-0 md:border-r border-editorial/10 dark:border-white/8' : ''}`}
+              >
+                {/* Nail image thumbnail */}
+                <div className="w-16 h-16 overflow-hidden mb-6">
+                  <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
+                </div>
+                {/* Stars */}
+                <div className="flex gap-0.5 mb-4">
+                  {Array(5).fill(0).map((_, j) => (
+                    <span key={j} className="text-brand-600 text-sm">★</span>
+                  ))}
+                </div>
+                <blockquote className="font-display text-xl italic font-light text-editorial dark:text-[#F0EBE8] leading-relaxed mb-6">
+                  "{t.quote}"
+                </blockquote>
+                <p className="font-body text-xs tracking-widest uppercase text-mid dark:text-[#A09590]">{t.name}</p>
+              </InView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          INSTAGRAM STRIP
+      ══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20">
+        <InView className="container-xl section-padding text-center">
+          <p className="editorial-label mb-4">Follow along</p>
+          <a
+            href="https://www.instagram.com/beautybyamy000"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 font-editorial text-4xl sm:text-5xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] hover:text-brand-600 dark:hover:text-brand-400 transition-colors duration-300"
+          >
+            <Instagram size={36} className="shrink-0" />
+            @beautybyamy000
+            <ArrowRight size={24} className="transition-transform duration-300 group-hover:translate-x-2" />
+          </a>
+        </InView>
       </section>
 
       <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />

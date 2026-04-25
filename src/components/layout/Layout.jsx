@@ -16,7 +16,7 @@ export default function Layout() {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-[#0f0a0b]">
+    <div className="min-h-screen flex flex-col bg-cream dark:bg-[#0D0808]">
       <Navbar onBookNow={() => setBookingOpen(true)} />
       <AnimatePresence mode="wait">
         <motion.main
