@@ -1,20 +1,18 @@
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
 
 const variants = {
-  primary:   'bg-brand-600 hover:bg-brand-700 text-white border border-brand-600 hover:border-brand-700',
-  secondary: 'bg-transparent hover:bg-brand-600 text-brand-600 hover:text-white border border-brand-600',
-  outline:   'bg-transparent hover:bg-editorial text-editorial hover:text-white border border-editorial dark:text-[#F0EBE8] dark:border-[#F0EBE8]/30 dark:hover:bg-[#F0EBE8] dark:hover:text-editorial dark:hover:border-[#F0EBE8]',
-  ghost:     'bg-transparent text-brand-600 hover:text-brand-700 border border-transparent',
-  white:     'bg-white text-editorial hover:bg-cream border border-white',
-  cream:     'bg-cream text-editorial hover:bg-warm-white border border-cream',
+  primary:   'bg-brand-600 hover:bg-brand-700 text-white shadow-soft hover:shadow-glow-sm',
+  secondary: 'bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 dark:text-brand-300',
+  outline:   'border border-warm-300 dark:border-warm-600 text-warm-700 dark:text-warm-200 hover:border-brand-400 hover:text-brand-600 dark:hover:border-brand-500 dark:hover:text-brand-400 bg-transparent',
+  ghost:     'text-warm-700 dark:text-warm-300 hover:bg-warm-100 dark:hover:bg-warm-800 bg-transparent',
+  white:     'bg-white text-warm-900 hover:bg-warm-100 shadow-soft border border-warm-200',
 }
 
 const sizes = {
-  sm:  'px-5 py-2.5 text-xs',
-  md:  'px-7 py-3.5 text-sm',
-  lg:  'px-9 py-4 text-sm',
-  xl:  'px-11 py-5 text-base',
+  sm:  'px-5 py-2.5 text-xs rounded-full gap-2',
+  md:  'px-6 py-3 text-sm rounded-full gap-2',
+  lg:  'px-8 py-3.5 text-sm rounded-full gap-2.5',
+  xl:  'px-10 py-4 text-base rounded-full gap-3',
 }
 
 export default function Button({
@@ -28,7 +26,6 @@ export default function Button({
   fullWidth = false,
   loading = false,
   icon,
-  arrow = false,
 }) {
   return (
     <motion.button
@@ -36,12 +33,12 @@ export default function Button({
       onClick={onClick}
       disabled={disabled || loading}
       whileHover={{ scale: disabled ? 1 : 1.015 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
-      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+      whileTap={{ scale: disabled ? 1 : 0.985 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       className={[
-        'group inline-flex items-center justify-center gap-2.5 font-body font-medium tracking-wide',
+        'inline-flex items-center justify-center font-body font-medium tracking-wide',
         'transition-all duration-200 cursor-pointer select-none',
-        'disabled:opacity-40 disabled:cursor-not-allowed',
+        'disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none',
         variants[variant],
         sizes[size],
         fullWidth ? 'w-full' : '',
@@ -49,7 +46,7 @@ export default function Button({
       ].join(' ')}
     >
       {loading ? (
-        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+        <svg className="animate-spin h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
         </svg>
@@ -57,16 +54,6 @@ export default function Button({
         <span className="shrink-0">{icon}</span>
       ) : null}
       {children}
-      {arrow && (
-        <motion.span
-          className="shrink-0 inline-flex"
-          initial={{ x: 0 }}
-          whileHover={{ x: 4 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-        >
-          <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
-        </motion.span>
-      )}
     </motion.button>
   )
 }

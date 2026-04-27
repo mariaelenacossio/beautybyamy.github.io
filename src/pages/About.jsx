@@ -1,30 +1,17 @@
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Instagram, ArrowRight, Award, Shield, Sparkles, Heart } from 'lucide-react'
+import { Instagram, Star } from 'lucide-react'
 import BookingModal from '../components/booking/BookingModal'
 
 const BASE = import.meta.env.BASE_URL
 
-const CREDENTIALS = [
-  { icon: Award,    label: '4+ Years Professional Experience' },
-  { icon: Shield,   label: 'Licensed & Certified Nail Technician' },
-  { icon: Sparkles, label: 'Trained in Latest Techniques' },
-  { icon: Heart,    label: '500+ Satisfied Clients' },
-]
-
-const VALUES = [
-  { no: '01', title: 'Precision',   desc: 'Every nail, every lash — crafted with meticulous attention to detail.' },
-  { no: '02', title: 'Cleanliness', desc: 'Fully sanitized tools and a hygienic workspace, every single visit.'  },
-  { no: '03', title: 'Connection',  desc: 'Building genuine relationships, not just appointments.'                 },
-]
-
-function InView({ children, className = '', delay = 0 }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+function Reveal({ children, className = '', delay = 0 }) {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-72px' })
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
@@ -34,214 +21,205 @@ function InView({ children, className = '', delay = 0 }) {
   )
 }
 
+const CREDENTIALS = [
+  { value: '4+',    label: 'Years of experience'    },
+  { value: '500+',  label: 'Satisfied clients'       },
+  { value: '5.0',   label: 'Average star rating'     },
+  { value: '100%',  label: 'Satisfaction guaranteed' },
+]
+
+const VALUES = [
+  {
+    title: 'Precision',
+    desc:  'I believe the difference between good and great is attention to detail. Every nail, every lash — crafted exactly as envisioned.',
+  },
+  {
+    title: 'Cleanliness',
+    desc:  'Fully sanitized tools and a pristine workspace, without exception. Your health and comfort always come first.',
+  },
+  {
+    title: 'Connection',
+    desc:  'I build real relationships with my clients. Not just appointments — genuine care about how you look and feel.',
+  },
+]
+
 export default function About() {
   const [bookingOpen, setBookingOpen] = useState(false)
 
   return (
     <>
-      {/* ── Hero Grid ─────────────────────────────────────── */}
-      <section className="border-b border-editorial/10 dark:border-white/8">
-        <div className="hidden lg:grid" style={{ gridTemplateColumns: '1.3fr 1fr', minHeight: '70vh' }}>
-          {/* Left: Amy photo */}
-          <div className="relative overflow-hidden border-r border-editorial/10 dark:border-white/8 group">
-            <motion.img
-              src={`${BASE}images/Amy-profile.png`}
-              alt="Amy — Nail Technician & Beauty Specialist"
-              className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-              initial={{ scale: 1.04, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-editorial/50 to-transparent" />
-            {/* Bottom label */}
-            <div className="absolute bottom-8 left-8">
-              <p className="editorial-label text-white/60 mb-1">Beauty Specialist</p>
-              <p className="font-display text-3xl italic text-white font-light">Amy</p>
-            </div>
-          </div>
-
-          {/* Right: text */}
-          <div className="bg-cream dark:bg-[#0D0808] p-12 pt-32 flex flex-col justify-between">
-            <div>
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="editorial-label mb-5"
-              >
-                About Amy
-              </motion.p>
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="font-editorial text-[clamp(3.5rem,5vw,5.5rem)] leading-none tracking-wide uppercase text-editorial dark:text-[#F0EBE8]"
-              >
-                HI,<br />
-                <span className="font-display italic font-light text-[clamp(2rem,3.5vw,3.5rem)] text-brand-600">
-                  I'm Amy.
-                </span>
-              </motion.h1>
-            </div>
-
+      {/* ── Hero ──────────────────────────────────────────── */}
+      <section className="pt-32 pb-0 bg-warm-50 dark:bg-warm-900">
+        <div className="wrap-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-end">
+            {/* Text */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="space-y-6"
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="pb-16 lg:pb-24"
             >
-              <p className="font-body text-sm text-mid dark:text-[#A09590] leading-relaxed">
-                I'm a beauty specialist passionate about nail art and eyelash extensions.
-                Trained in the latest techniques and armed with an eye for detail,
-                I'm here to make your hands — and eyes — look absolutely fantastic.
+              <p className="label mb-5">About Amy</p>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-normal text-warm-900 dark:text-warm-100 leading-tight mb-6">
+                Hi there,<br />
+                <em className="text-brand-500 dark:text-brand-400">I'm Amy.</em>
+              </h1>
+              <p className="body-lg mb-8 max-w-md">
+                I'm a licensed nail technician and beauty specialist with a
+                passion for creating looks that make you feel truly beautiful.
               </p>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap gap-3">
                 <motion.button
                   onClick={() => setBookingOpen(true)}
-                  whileHover={{ x: 4 }}
-                  className="group flex items-center justify-between bg-brand-600 hover:bg-brand-700 text-white px-8 py-5 font-body text-xs font-medium tracking-widest uppercase transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-7 py-3 rounded-full font-body text-sm font-medium transition-colors shadow-soft"
                 >
                   Book with Amy
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </motion.button>
                 <a
                   href="https://www.instagram.com/beautybyamy000"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-between border border-editorial/15 dark:border-white/10 text-editorial dark:text-[#F0EBE8] px-8 py-5 font-body text-xs font-medium tracking-widest uppercase hover:border-editorial/30 transition-colors"
+                  className="inline-flex items-center gap-2 border border-warm-200 dark:border-warm-600 text-warm-700 dark:text-warm-300 hover:border-brand-300 hover:text-brand-600 dark:hover:text-brand-400 px-7 py-3 rounded-full font-body text-sm transition-all"
                 >
-                  <span className="flex items-center gap-2"><Instagram size={13} /> Follow on Instagram</span>
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  <Instagram size={15} /> Instagram
                 </a>
               </div>
             </motion.div>
-          </div>
-        </div>
 
-        {/* Mobile */}
-        <div className="lg:hidden">
-          <div className="relative overflow-hidden" style={{ height: '60vh' }}>
-            <img src={`${BASE}images/Amy-profile.png`} alt="Amy" className="w-full h-full object-cover object-top" />
-            <div className="absolute inset-0 bg-gradient-to-t from-editorial/60 to-transparent" />
-            <div className="absolute bottom-6 left-6">
-              <p className="editorial-label text-white/60 mb-1">About</p>
-              <h1 className="font-editorial text-5xl leading-none tracking-wide uppercase text-white">
-                Hi, <span className="font-display italic font-light text-3xl text-brand-300">I'm Amy</span>
-              </h1>
-            </div>
-          </div>
-          <div className="section-padding py-10 space-y-5">
-            <p className="font-body text-sm text-mid dark:text-[#A09590] leading-relaxed">
-              I'm a beauty specialist passionate about nail art and eyelash extensions.
-              Trained in the latest techniques and armed with an eye for detail.
-            </p>
-            <button
-              onClick={() => setBookingOpen(true)}
-              className="w-full bg-brand-600 text-white font-body text-xs font-medium tracking-widest uppercase py-4 hover:bg-brand-700 transition-colors"
-            >
-              Book with Amy
-            </button>
+            {/* Photo — bleeds to bottom */}
+            <Reveal delay={0.1} className="relative lg:self-end">
+              <div className="relative rounded-t-2xl overflow-hidden aspect-[3/4] max-w-sm mx-auto lg:mx-0 lg:ml-auto">
+                <img
+                  src={`${BASE}images/Amy-profile.png`}
+                  alt="Amy — Nail Technician & Beauty Specialist"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ── Credentials Strip ─────────────────────────────── */}
-      <section className="border-b border-editorial/10 dark:border-white/8">
-        <div className="grid grid-cols-2 lg:grid-cols-4">
-          {CREDENTIALS.map(({ icon: Icon, label }, i) => (
-            <InView
-              key={label}
-              delay={i * 0.08}
-              className={`flex items-center gap-4 p-8 ${
-                i < CREDENTIALS.length - 1 ? 'border-b lg:border-b-0 border-r border-editorial/10 dark:border-white/8' : ''
-              }`}
-            >
-              <div className="w-10 h-10 bg-brand-600 flex items-center justify-center shrink-0">
-                <Icon size={16} className="text-white" />
-              </div>
-              <span className="font-body text-xs text-mid dark:text-[#A09590] leading-snug">{label}</span>
-            </InView>
-          ))}
+      {/* ── Stats ─────────────────────────────────────────── */}
+      <section className="bg-white dark:bg-warm-800 border-y border-warm-200 dark:border-warm-700">
+        <div className="wrap-lg">
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {CREDENTIALS.map((c, i) => (
+              <Reveal
+                key={c.label}
+                delay={i * 0.07}
+                className={[
+                  'py-10 px-6 text-center',
+                  i < CREDENTIALS.length - 1 ? 'border-b lg:border-b-0 border-r border-warm-100 dark:border-warm-700' : '',
+                ].join(' ')}
+              >
+                <p className="font-display text-4xl font-normal text-warm-900 dark:text-warm-100 mb-1">{c.value}</p>
+                <p className="label">{c.label}</p>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── Story ─────────────────────────────────────────── */}
-      <section className="border-b border-editorial/10 dark:border-white/8">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          {/* Story text */}
-          <div className="section-padding py-16 sm:py-20 border-b lg:border-b-0 lg:border-r border-editorial/10 dark:border-white/8">
-            <InView>
-              <p className="editorial-label mb-5">My Story</p>
-              <h2 className="font-editorial text-4xl sm:text-5xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] mb-8">
-                Passion<br />Turned Into<br />Purpose
+      <section className="section bg-warm-50 dark:bg-warm-900">
+        <div className="wrap-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+            <Reveal>
+              <p className="label mb-4">My story</p>
+              <h2 className="font-display text-4xl sm:text-5xl font-normal text-warm-900 dark:text-warm-100 mb-8">
+                Passion turned<br /><em className="text-brand-500 dark:text-brand-400">into purpose.</em>
               </h2>
-              <div className="space-y-5 font-body text-sm text-mid dark:text-[#A09590] leading-relaxed">
+              <div className="space-y-5 body-lg">
                 <p>
-                  I've always believed that beauty is a form of self-care — and that when you look good,
-                  you feel unstoppable. That belief led me into the beauty industry, where I've spent
-                  years honing my craft in nail artistry and eyelash extensions.
+                  I've always believed that beauty is a form of self-care — and that when you look
+                  good, you feel unstoppable. That belief led me into the beauty industry, where
+                  I've spent years honing my craft in nail artistry and eyelash extensions.
                 </p>
                 <p>
                   From intricate nail designs to perfectly applied volume lashes, every appointment
-                  is a chance for me to blend artistry with technical skill. I stay current with
-                  the latest trends and techniques so my clients always leave looking and feeling
-                  their absolute best.
+                  is a chance for me to blend artistry with technical precision. I stay current with
+                  the latest trends and techniques so my clients always leave looking their best.
                 </p>
                 <p>
-                  Working at Fancy Nails & Spa in Fairfax, Virginia, I serve clients who appreciate
-                  quality, creativity, and a warm, personalized experience. Every set of nails tells a story —
-                  and I'm here to help you tell yours.
+                  Working at Fancy Nails & Spa in Fairfax, Virginia, I serve clients who
+                  appreciate quality, creativity, and a warm, personal experience.
                 </p>
               </div>
-            </InView>
-          </div>
+            </Reveal>
 
-          {/* Values */}
-          <div className="section-padding py-16 sm:py-20">
-            <InView delay={0.1}>
-              <p className="editorial-label mb-8">My Values</p>
-              <div className="space-y-0">
-                {VALUES.map((val, i) => (
+            {/* Values */}
+            <Reveal delay={0.1}>
+              <p className="label mb-8">What I stand for</p>
+              <div className="space-y-8">
+                {VALUES.map((v, i) => (
                   <motion.div
-                    key={val.no}
-                    initial={{ opacity: 0, x: -16 }}
+                    key={v.title}
+                    className="pb-8 border-b border-warm-200 dark:border-warm-700 last:border-0 last:pb-0"
+                    initial={{ opacity: 0, x: -14 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className={`flex gap-6 py-8 ${i < VALUES.length - 1 ? 'border-b border-editorial/10 dark:border-white/8' : ''}`}
                   >
-                    <span className="font-body text-xs text-mid/40 dark:text-[#A09590]/40 mt-1">{val.no}</span>
-                    <div>
-                      <h3 className="font-editorial text-2xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] mb-2">
-                        {val.title}
-                      </h3>
-                      <p className="font-body text-sm text-mid dark:text-[#A09590] leading-relaxed">{val.desc}</p>
-                    </div>
+                    <h3 className="font-display text-xl font-normal text-warm-900 dark:text-warm-100 mb-2">
+                      {v.title}
+                    </h3>
+                    <p className="body-sm">{v.desc}</p>
                   </motion.div>
                 ))}
               </div>
-            </InView>
+            </Reveal>
           </div>
         </div>
       </section>
 
+      {/* ── Gallery strip ─────────────────────────────────── */}
+      <section className="overflow-hidden border-y border-warm-200 dark:border-warm-700">
+        <div className="grid grid-cols-4 h-48 sm:h-64 lg:h-72">
+          {[
+            `${BASE}images/Nails-1.png`,
+            `${BASE}images/Nails-2.png`,
+            `${BASE}images/BG-about.jpg`,
+            `${BASE}images/Nails-5.png`,
+          ].map((src, i) => (
+            <div key={i} className="overflow-hidden group relative">
+              <img
+                src={src}
+                alt=""
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── CTA ───────────────────────────────────────────── */}
-      <section className="py-20 sm:py-28">
-        <InView className="container-xl section-padding text-center">
-          <p className="editorial-label mb-4">Let's get started</p>
-          <h2 className="font-editorial text-5xl sm:text-6xl lg:text-7xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] mb-10">
-            BOOK WITH AMY
-          </h2>
-          <motion.button
-            onClick={() => setBookingOpen(true)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="group inline-flex items-center gap-4 bg-brand-600 hover:bg-brand-700 text-white px-12 py-5 font-body text-sm font-medium tracking-widest uppercase transition-colors"
-          >
-            Book Appointment
-            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-          </motion.button>
-        </InView>
+      <section className="section bg-brand-50 dark:bg-brand-900/20">
+        <div className="wrap text-center">
+          <Reveal>
+            <div className="flex justify-center gap-0.5 mb-6">
+              {Array(5).fill(0).map((_, i) => (
+                <Star key={i} size={16} className="fill-brand-400 text-brand-400" />
+              ))}
+            </div>
+            <h2 className="font-display text-4xl sm:text-5xl font-normal text-warm-900 dark:text-warm-100 mb-4">
+              Ready to book with Amy?
+            </h2>
+            <p className="body-lg max-w-md mx-auto mb-10">
+              Choose your service, pick a time that works for you, and I'll take care of the rest.
+            </p>
+            <motion.button
+              onClick={() => setBookingOpen(true)}
+              whileHover={{ scale: 1.02, boxShadow: '0 0 28px rgba(160,85,73,0.22)' }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-9 py-4 rounded-full font-body text-sm font-medium transition-colors shadow-soft"
+            >
+              Book an Appointment
+            </motion.button>
+          </Reveal>
+        </div>
       </section>
 
       <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />

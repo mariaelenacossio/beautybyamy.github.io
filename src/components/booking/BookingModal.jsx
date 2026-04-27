@@ -8,12 +8,12 @@ import TimeStep from './TimeStep'
 import ClientStep from './ClientStep'
 import ConfirmationStep from './ConfirmationStep'
 
-const STEPS = ['Service', 'Date', 'Time', 'Details', 'Confirm']
+const STEPS = ['Service', 'Date', 'Time', 'Your Details', 'Review']
 
 const slideVariants = {
-  enter: (dir) => ({ x: dir > 0 ? 40 : -40, opacity: 0 }),
+  enter:  (dir) => ({ x: dir > 0 ? 32 : -32, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit:  (dir) => ({ x: dir > 0 ? -40 : 40, opacity: 0 }),
+  exit:   (dir) => ({ x: dir > 0 ? -32 : 32, opacity: 0 }),
 }
 
 export default function BookingModal({ isOpen, onClose }) {
@@ -43,9 +43,7 @@ export default function BookingModal({ isOpen, onClose }) {
   const handleClose = () => {
     onClose()
     setTimeout(() => {
-      setStep(0)
-      setDir(1)
-      setConfirmed(false)
+      setStep(0); setDir(1); setConfirmed(false)
       setBooking({ serviceId: '', serviceName: '', servicePrice: 0, date: '', time: '', clientName: '', clientEmail: '', clientPhone: '', notes: '' })
     }, 300)
   }
@@ -53,60 +51,63 @@ export default function BookingModal({ isOpen, onClose }) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-warm-900/50 dark:bg-black/70 backdrop-blur-sm"
         onClick={handleClose}
       />
 
-      {/* Sheet / Dialog */}
+      {/* Modal */}
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
+        initial={{ opacity: 0, y: 48 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 40 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="relative w-full sm:max-w-xl bg-cream dark:bg-[#120B0C] shadow-2xl overflow-hidden rounded-t-2xl sm:rounded-none"
+        exit={{ opacity: 0, y: 32 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+        className="relative w-full sm:max-w-lg bg-white dark:bg-warm-800 shadow-soft-lg rounded-t-2xl sm:rounded-2xl overflow-hidden border border-warm-100 dark:border-warm-700"
         style={{ maxHeight: '92dvh' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-editorial/10 dark:border-white/10">
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-warm-100 dark:border-warm-700">
           <div>
-            <p className="font-body text-[10px] text-brand-600 font-medium uppercase tracking-widest mb-0.5">
+            <p className="font-body text-2xs text-brand-500 font-medium uppercase tracking-widest mb-0.5">
               {confirmed ? 'Confirmed!' : `Step ${step + 1} of ${STEPS.length}`}
             </p>
-            <h2 className="font-editorial text-2xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">
-              {confirmed ? 'See you soon!' : STEPS[step]}
+            <h2 className="font-display text-xl font-normal text-warm-900 dark:text-warm-100">
+              {confirmed ? 'See you soon ✨' : STEPS[step]}
             </h2>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 text-editorial/50 hover:text-editorial dark:text-white/40 dark:hover:text-white transition-colors"
             aria-label="Close"
+            className="p-2 rounded-xl text-warm-400 hover:text-warm-700 dark:hover:text-warm-200 hover:bg-warm-100 dark:hover:bg-warm-700 transition-all"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Progress bar — sharp editorial lines */}
+        {/* Progress dots */}
         {!confirmed && (
-          <div className="flex">
+          <div className="flex gap-1.5 px-6 py-3 bg-warm-50 dark:bg-warm-900/50 border-b border-warm-100 dark:border-warm-700">
             {STEPS.map((_, i) => (
               <div
                 key={i}
-                className={`h-0.5 flex-1 transition-all duration-500 ${
-                  i <= step ? 'bg-brand-600' : 'bg-editorial/10 dark:bg-white/10'
-                }`}
+                className={[
+                  'h-1.5 flex-1 rounded-full transition-all duration-500',
+                  i <= step
+                    ? 'bg-brand-500'
+                    : 'bg-warm-200 dark:bg-warm-700',
+                ].join(' ')}
               />
             ))}
           </div>
         )}
 
         {/* Step content */}
-        <div className="overflow-y-auto" style={{ maxHeight: 'calc(92dvh - 120px)' }}>
+        <div className="overflow-y-auto" style={{ maxHeight: 'calc(92dvh - 130px)' }}>
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={confirmed ? 'done' : step}
@@ -115,8 +116,8 @@ export default function BookingModal({ isOpen, onClose }) {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="px-6 py-5"
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="px-6 py-6"
             >
               {confirmed ? (
                 <ConfirmationStep booking={booking} onClose={handleClose} />
@@ -129,9 +130,7 @@ export default function BookingModal({ isOpen, onClose }) {
               ) : step === 3 ? (
                 <ClientStep booking={booking} update={update} onNext={() => go(4)} onBack={() => go(2)} />
               ) : (
-                <div className="space-y-5">
-                  <ReviewSummary booking={booking} onBack={() => go(3)} onConfirm={handleConfirm} />
-                </div>
+                <ReviewSummary booking={booking} onBack={() => go(3)} onConfirm={handleConfirm} />
               )}
             </motion.div>
           </AnimatePresence>
@@ -143,44 +142,44 @@ export default function BookingModal({ isOpen, onClose }) {
 
 function ReviewSummary({ booking, onBack, onConfirm }) {
   const rows = [
-    { label: 'Service',  value: booking.serviceName },
-    { label: 'Price',    value: `$${booking.servicePrice}` },
-    { label: 'Date',     value: booking.date },
-    { label: 'Time',     value: booking.time },
-    { label: 'Name',     value: booking.clientName },
-    { label: 'Email',    value: booking.clientEmail },
-    { label: 'Phone',    value: booking.clientPhone },
+    { label: 'Service', value: booking.serviceName },
+    { label: 'Price',   value: `$${booking.servicePrice}` },
+    { label: 'Date',    value: booking.date },
+    { label: 'Time',    value: booking.time },
+    { label: 'Name',    value: booking.clientName },
+    { label: 'Email',   value: booking.clientEmail },
+    { label: 'Phone',   value: booking.clientPhone },
     ...(booking.notes ? [{ label: 'Notes', value: booking.notes }] : []),
   ]
 
   return (
     <>
-      <p className="font-body text-xs text-mid dark:text-[#A09590] mb-5 tracking-wide">
-        Please review your booking details before confirming.
+      <p className="font-body text-sm text-warm-500 dark:text-warm-400 mb-5">
+        Please review your details before confirming.
       </p>
-      <div className="border border-editorial/10 dark:border-white/10 overflow-hidden">
+      <div className="rounded-xl overflow-hidden border border-warm-200 dark:border-warm-700 mb-4">
         {rows.map(({ label, value }) => (
-          <div key={label} className="flex justify-between px-5 py-3.5 border-b border-editorial/8 dark:border-white/5 last:border-0">
-            <span className="font-body text-[10px] font-medium text-mid/60 dark:text-[#A09590]/60 uppercase tracking-widest">{label}</span>
-            <span className="font-body text-sm text-editorial dark:text-[#F0EBE8] text-right max-w-[60%]">{value}</span>
+          <div key={label} className="flex justify-between px-4 py-3 border-b border-warm-100 dark:border-warm-700/70 last:border-0">
+            <span className="font-body text-xs font-medium text-warm-400 dark:text-warm-500 uppercase tracking-wide">{label}</span>
+            <span className="font-body text-sm text-warm-900 dark:text-warm-100 text-right max-w-[60%]">{value}</span>
           </div>
         ))}
       </div>
-      <p className="font-body text-xs text-mid/50 dark:text-[#A09590]/50 mt-3">
-        Confirmation will be sent to <strong className="text-editorial dark:text-[#F0EBE8]">{booking.clientEmail}</strong>
+      <p className="font-body text-xs text-warm-400 dark:text-warm-500 mb-6">
+        Confirmation sent to <strong className="text-warm-700 dark:text-warm-300">{booking.clientEmail}</strong>
       </p>
-      <div className="flex gap-3 mt-6">
+      <div className="flex gap-3">
         <button
           onClick={onBack}
-          className="flex-1 py-3.5 border border-editorial/15 dark:border-white/15 font-body text-xs font-medium tracking-widest uppercase text-editorial dark:text-[#F0EBE8] hover:border-editorial/30 transition-colors"
+          className="flex-1 py-3 rounded-full border border-warm-200 dark:border-warm-600 font-body text-sm text-warm-600 dark:text-warm-300 hover:bg-warm-50 dark:hover:bg-warm-700 transition-all"
         >
           Back
         </button>
         <motion.button
           onClick={onConfirm}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="flex-[2] py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-body font-medium text-xs tracking-widest uppercase transition-colors"
+          whileHover={{ scale: 1.015 }}
+          whileTap={{ scale: 0.985 }}
+          className="flex-[2] py-3 rounded-full bg-brand-600 hover:bg-brand-700 text-white font-body font-medium text-sm transition-colors shadow-soft"
         >
           Confirm Booking
         </motion.button>

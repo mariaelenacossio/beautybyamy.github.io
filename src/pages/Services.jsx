@@ -1,78 +1,17 @@
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ArrowRight, Instagram, Check } from 'lucide-react'
+import { ArrowRight, Check, Instagram } from 'lucide-react'
 import BookingModal from '../components/booking/BookingModal'
 
 const BASE = import.meta.env.BASE_URL
 
-const SERVICES_DATA = [
-  {
-    no: '01',
-    title: 'Nail Care',
-    icon: '💅',
-    description: 'Precision-crafted nails using premium products for a flawless, long-lasting finish.',
-    img: `${BASE}images/Nails-1.png`,
-    instagramLink: 'https://www.instagram.com/p/CTkdAn7nCN6/',
-    items: [
-      { name: 'Acrylic Fullset',      price: 80,  duration: '90 min', popular: true  },
-      { name: 'Acrylic Refill',        price: 65,  duration: '60 min', popular: false },
-      { name: 'Dipping Powder',        price: 75,  duration: '75 min', popular: true  },
-      { name: 'Dipping Powder Refill', price: 55,  duration: '60 min', popular: false },
-    ],
-  },
-  {
-    no: '02',
-    title: 'Eyelash Extensions',
-    icon: '✨',
-    description: 'Handcrafted lash sets that open your eyes and elevate your entire look.',
-    video: `${BASE}images/eyelashes-1.mp4`,
-    instagramLink: 'https://www.instagram.com/p/CTadPXfvTgA/',
-    items: [
-      { name: 'Volume Eyelash Set', price: 300, duration: '2.5 hr', popular: true  },
-      { name: 'Volume Refill',      price: 175, duration: '90 min', popular: false },
-      { name: 'Classic Eyelashes',  price: 275, duration: '2 hr',   popular: true  },
-      { name: 'Classic Refill',     price: 155, duration: '60 min', popular: false },
-    ],
-  },
-  {
-    no: '03',
-    title: 'Gift Certificates',
-    icon: '🎁',
-    description: 'Treat someone you love to a luxurious beauty experience — the gift that never misses.',
-    img: `${BASE}images/Nails-3.png`,
-    instagramLink: 'https://www.instagram.com/p/CO0JQBosF9i/',
-    items: [
-      { name: 'Nails + Manicure',        price: 100,  duration: null, popular: false },
-      { name: 'Classic Eyelashes Set',   price: 250,  duration: null, popular: false },
-      { name: 'Nails + Eyelashes Combo', price: 400,  duration: null, popular: true  },
-      { name: 'Custom Amount',           price: null, duration: null, popular: false, priceLabel: 'Min $65' },
-    ],
-  },
-]
-
-const GALLERY = [
-  { src: `${BASE}images/Nails-1.png`, alt: 'Acrylic nail art' },
-  { src: `${BASE}images/Nails-2.png`, alt: 'Nail design' },
-  { src: `${BASE}images/Nails-3.png`, alt: 'Nail art close-up' },
-  { src: `${BASE}images/Nails-4.png`, alt: 'Nail design detail' },
-  { src: `${BASE}images/Nails-5.png`, alt: 'Nail art gallery' },
-  { src: `${BASE}images/img-1.png`,   alt: 'Client nails' },
-]
-
-const INCLUDES = [
-  'Sanitized tools every visit',
-  'Premium product brands only',
-  'Personalized nail consultation',
-  'Touch-up guarantee',
-]
-
-function InView({ children, className = '', delay = 0 }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+function Reveal({ children, className = '', delay = 0 }) {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-72px' })
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
@@ -82,237 +21,262 @@ function InView({ children, className = '', delay = 0 }) {
   )
 }
 
+const SERVICES_DATA = [
+  {
+    title: 'Nail Care',
+    description: 'Precision-crafted nails using premium products for a flawless, long-lasting finish. From intricate designs to clean classics.',
+    img: `${BASE}images/Nails-1.png`,
+    instagramLink: 'https://www.instagram.com/p/CTkdAn7nCN6/',
+    items: [
+      { name: 'Acrylic Fullset',         price: 80,  duration: '90 min', popular: true  },
+      { name: 'Acrylic Refill',           price: 65,  duration: '60 min', popular: false },
+      { name: 'Dipping Powder',           price: 75,  duration: '75 min', popular: true  },
+      { name: 'Dipping Powder Refill',    price: 55,  duration: '60 min', popular: false },
+    ],
+  },
+  {
+    title: 'Eyelash Extensions',
+    description: 'Handcrafted lash sets that open your eyes and elevate your entire look — from natural classics to dramatic volumes.',
+    img: `${BASE}images/allef-vinicius-v75vjSfgLDc-unsplash.jpg`,
+    instagramLink: 'https://www.instagram.com/p/CTadPXfvTgA/',
+    items: [
+      { name: 'Volume Eyelash Set',  price: 300, duration: '2.5 hr', popular: true  },
+      { name: 'Volume Refill',       price: 175, duration: '90 min', popular: false },
+      { name: 'Classic Eyelashes',   price: 275, duration: '2 hr',   popular: true  },
+      { name: 'Classic Refill',      price: 155, duration: '60 min', popular: false },
+    ],
+  },
+  {
+    title: 'Gift Certificates',
+    description: 'Treat someone you love to a luxurious beauty experience. Redeemable for any service — the gift that never misses.',
+    img: `${BASE}images/Nails-3.png`,
+    instagramLink: 'https://www.instagram.com/p/CO0JQBosF9i/',
+    items: [
+      { name: 'Nails + Manicure',           price: 100,  duration: null, popular: false },
+      { name: 'Classic Eyelashes Set',       price: 250,  duration: null, popular: false },
+      { name: 'Nails + Eyelashes Combo',     price: 400,  duration: null, popular: true  },
+      { name: 'Custom Amount',               price: null, duration: null, popular: false, priceLabel: 'Min $65' },
+    ],
+  },
+]
+
+const GALLERY = [
+  `${BASE}images/Nails-1.png`,
+  `${BASE}images/Nails-2.png`,
+  `${BASE}images/Nails-3.png`,
+  `${BASE}images/Nails-4.png`,
+  `${BASE}images/Nails-5.png`,
+  `${BASE}images/img-1.png`,
+]
+
+const INCLUDES = [
+  'Sanitized tools for every appointment',
+  'Premium product brands only',
+  'Personalised nail consultation',
+  'Touch-up guarantee policy',
+  'Relaxed, welcoming environment',
+]
+
 export default function Services() {
   const [bookingOpen, setBookingOpen] = useState(false)
 
   return (
     <>
-      {/* ── Hero ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-editorial/10 dark:border-white/8">
-        <div className="hidden lg:grid" style={{ gridTemplateColumns: '1fr 1fr', minHeight: '55vh' }}>
-          {/* Left: media */}
-          <div className="relative overflow-hidden border-r border-editorial/10 dark:border-white/8 group">
-            <video
-              src={`${BASE}images/video-2.mp4`}
-              autoPlay muted loop playsInline
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-editorial/30" />
-            <div className="relative z-10 p-12 pt-32 flex flex-col justify-end h-full">
-              <p className="editorial-label text-white/60 mb-2">Menu & Pricing</p>
-              <h1 className="font-editorial text-[clamp(4rem,7vw,7rem)] leading-none tracking-wide uppercase text-white">
-                Services
-              </h1>
-            </div>
-          </div>
-          {/* Right: text + CTA */}
-          <div className="bg-cream dark:bg-[#0D0808] p-12 pt-32 flex flex-col justify-end gap-8">
-            <p className="font-body text-sm text-mid dark:text-[#A09590] leading-relaxed max-w-xs">
-              Everything you need for nails and lashes that make you feel like the best version of yourself.
+      {/* ── Hero ──────────────────────────────────────────── */}
+      <section className="pt-32 pb-20 lg:pt-40 lg:pb-28 bg-warm-50 dark:bg-warm-900">
+        <div className="wrap text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="label mb-4">Menu & Pricing</p>
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-normal text-warm-900 dark:text-warm-100 mb-6">
+              Services
+            </h1>
+            <p className="body-lg max-w-lg mx-auto mb-8">
+              Everything you need to look and feel your absolute best,
+              crafted with care and precision every time.
             </p>
-            <div className="flex flex-col gap-3">
-              <motion.button
-                onClick={() => setBookingOpen(true)}
-                whileHover={{ x: 4 }}
-                className="group flex items-center justify-between bg-brand-600 hover:bg-brand-700 text-white px-8 py-5 font-body text-xs font-medium tracking-widest uppercase transition-colors"
-              >
-                Book an Appointment
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-              </motion.button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile hero */}
-        <div className="lg:hidden relative overflow-hidden" style={{ minHeight: '40vh' }}>
-          <video
-            src={`${BASE}images/video-2.mp4`}
-            autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-editorial/40" />
-          <div className="relative z-10 section-padding pt-24 pb-10 flex flex-col justify-end h-full">
-            <p className="editorial-label text-white/60 mb-2">Menu & Pricing</p>
-            <h1 className="font-editorial text-6xl leading-none tracking-wide uppercase text-white">Services</h1>
-          </div>
+            <motion.button
+              onClick={() => setBookingOpen(true)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-3.5 rounded-full font-body text-sm font-medium transition-colors shadow-soft"
+            >
+              Book an Appointment
+            </motion.button>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── Service Sections ────────────────────────────── */}
+      {/* ── Service Sections ──────────────────────────────── */}
       {SERVICES_DATA.map((svc, idx) => (
-        <section key={svc.no} className="border-b border-editorial/10 dark:border-white/8">
-          <div className="container-xl section-padding py-16 sm:py-20">
-            <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${idx % 2 !== 0 ? 'lg:[direction:rtl]' : ''}`}>
-              {/* Media */}
-              <InView className={idx % 2 !== 0 ? 'lg:[direction:ltr]' : ''}>
-                <div className="relative overflow-hidden aspect-[4/5] group">
-                  {svc.video ? (
-                    <video
-                      src={svc.video}
-                      autoPlay muted loop playsInline
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <img
-                      src={svc.img}
-                      alt={svc.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  )}
-                  {/* Number overlay */}
-                  <div className="absolute top-6 left-6">
-                    <span className="font-editorial text-8xl text-white/20 leading-none">{svc.no}</span>
-                  </div>
+        <section
+          key={svc.title}
+          className={[
+            'section border-t border-warm-200 dark:border-warm-700',
+            idx % 2 === 0 ? 'bg-white dark:bg-warm-800' : 'bg-warm-50 dark:bg-warm-900',
+          ].join(' ')}
+        >
+          <div className="wrap-lg">
+            <div className={[
+              'grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center',
+              idx % 2 !== 0 ? 'lg:flex-row-reverse' : '',
+            ].join(' ')}>
+              {/* Image */}
+              <Reveal className={idx % 2 !== 0 ? 'lg:order-2' : ''}>
+                <div className="relative rounded-2xl overflow-hidden aspect-[4/3] group">
+                  <img
+                    src={svc.img}
+                    alt={svc.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
+                  />
                   <a
                     href={svc.instagramLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/90 dark:bg-editorial/80 backdrop-blur-sm text-editorial dark:text-white px-4 py-2 text-[10px] font-body font-medium tracking-widest uppercase hover:bg-white transition-colors"
+                    className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-white/90 dark:bg-warm-900/90 backdrop-blur-sm text-warm-700 dark:text-warm-200 hover:text-brand-600 dark:hover:text-brand-400 px-3 py-2 rounded-full text-xs font-body font-medium shadow-soft transition-colors"
                   >
-                    <Instagram size={10} /> Instagram
+                    <Instagram size={12} /> View on Instagram
                   </a>
                 </div>
-              </InView>
+              </Reveal>
 
               {/* Content */}
-              <InView delay={0.1} className={idx % 2 !== 0 ? 'lg:[direction:ltr]' : ''}>
-                <div className="space-y-8">
-                  <div>
-                    <p className="editorial-label mb-3">{svc.no} / {String(SERVICES_DATA.length).padStart(2,'0')}</p>
-                    <h2 className="font-editorial text-5xl sm:text-6xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] mb-4">
-                      {svc.title}
-                    </h2>
-                    <p className="font-body text-sm text-mid dark:text-[#A09590] leading-relaxed">
-                      {svc.description}
-                    </p>
-                  </div>
+              <Reveal delay={0.1} className={idx % 2 !== 0 ? 'lg:order-1' : ''}>
+                <div>
+                  <p className="label mb-3">{String(idx + 1).padStart(2, '0')} / {String(SERVICES_DATA.length).padStart(2, '0')}</p>
+                  <h2 className="font-display text-4xl sm:text-5xl font-normal text-warm-900 dark:text-warm-100 mb-4">
+                    {svc.title}
+                  </h2>
+                  <p className="body-lg mb-8">{svc.description}</p>
 
-                  {/* Pricing rows */}
-                  <div className="space-y-0 border border-editorial/10 dark:border-white/8">
-                    {svc.items.map((item, j) => (
-                      <motion.div
+                  {/* Pricing table */}
+                  <div className="space-y-2 mb-8">
+                    {svc.items.map((item) => (
+                      <div
                         key={item.name}
-                        whileHover={{ backgroundColor: 'rgba(200,16,46,0.04)' }}
-                        className={`flex items-center justify-between px-6 py-5 ${
-                          j < svc.items.length - 1 ? 'border-b border-editorial/8 dark:border-white/6' : ''
-                        } group`}
+                        className="flex items-center justify-between py-3.5 px-5 bg-warm-50 dark:bg-warm-900/50 rounded-xl border border-warm-100 dark:border-warm-700 group hover:border-brand-200 dark:hover:border-brand-700/50 transition-colors"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5">
                           {item.popular && (
-                            <span className="bg-brand-600 text-white font-body text-[9px] font-bold tracking-widest uppercase px-2 py-1">
+                            <span className="px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 font-body text-2xs font-medium tracking-wide">
                               Popular
                             </span>
                           )}
-                          <span className="font-body text-sm text-editorial dark:text-[#F0EBE8]">{item.name}</span>
+                          <span className="font-body text-sm text-warm-800 dark:text-warm-200">{item.name}</span>
                         </div>
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-4">
                           {item.duration && (
-                            <span className="font-body text-xs text-mid dark:text-[#A09590] hidden sm:block">{item.duration}</span>
+                            <span className="font-body text-xs text-warm-400 dark:text-warm-500 hidden sm:block">{item.duration}</span>
                           )}
-                          <span className="font-body text-base font-semibold text-brand-600 dark:text-brand-400">
+                          <span className="font-body text-sm font-medium text-brand-600 dark:text-brand-400">
                             {item.price !== null ? `$${item.price}` : item.priceLabel}
                           </span>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
 
-                  <motion.button
+                  <button
                     onClick={() => setBookingOpen(true)}
-                    whileHover={{ x: 4 }}
-                    className="group flex items-center gap-4 font-body text-xs font-medium tracking-widest uppercase text-editorial dark:text-[#F0EBE8] hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-7 py-3 rounded-full font-body text-sm font-medium transition-colors shadow-soft group"
                   >
                     Book {svc.title}
-                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                  </motion.button>
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  </button>
                 </div>
-              </InView>
+              </Reveal>
             </div>
           </div>
         </section>
       ))}
 
-      {/* ── Gallery ─────────────────────────────────────── */}
-      <section className="py-16 border-b border-editorial/10 dark:border-white/8">
-        <div className="container-xl section-padding">
-          <InView className="flex items-end justify-between mb-10">
+      {/* ── Gallery ───────────────────────────────────────── */}
+      <section className="section border-t border-warm-200 dark:border-warm-700 bg-warm-50 dark:bg-warm-900">
+        <div className="wrap-lg">
+          <Reveal className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
-              <p className="editorial-label mb-3">Recent work</p>
-              <h2 className="font-editorial text-4xl sm:text-5xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8]">Gallery</h2>
+              <p className="label mb-3">Our work</p>
+              <h2 className="h-section text-warm-900 dark:text-warm-100">Recent gallery</h2>
             </div>
             <a
               href="https://www.instagram.com/beautybyamy000"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 font-body text-xs tracking-widest uppercase text-mid hover:text-brand-600 transition-colors group"
+              className="hidden sm:inline-flex items-center gap-1.5 font-body text-sm text-warm-500 dark:text-warm-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors group"
             >
-              <Instagram size={12} /> Instagram
-              <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+              <Instagram size={14} /> @beautybyamy000
+              <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </a>
-          </InView>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-            {GALLERY.map(({ src, alt }, i) => (
+          </Reveal>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {GALLERY.map((src, i) => (
               <motion.div
                 key={i}
-                className="relative aspect-square overflow-hidden group"
-                initial={{ opacity: 0, scale: 0.96 }}
+                className="overflow-hidden rounded-2xl aspect-square"
+                initial={{ opacity: 0, scale: 0.97 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.5, delay: i * 0.06 }}
-                whileHover={{ scale: 1.02, zIndex: 10 }}
+                transition={{ duration: 0.55, delay: i * 0.06 }}
               >
-                <img src={src} alt={alt} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-brand-600/0 group-hover:bg-brand-600/10 transition-colors duration-300" />
+                <motion.img
+                  src={src}
+                  alt={`Nail art ${i + 1}`}
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                />
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Includes ────────────────────────────────────── */}
-      <section className="py-16 sm:py-20">
-        <div className="container-xl section-padding">
+      {/* ── Includes ──────────────────────────────────────── */}
+      <section className="section border-t border-warm-200 dark:border-warm-700 bg-white dark:bg-warm-800">
+        <div className="wrap-lg">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <InView>
-              <p className="editorial-label mb-4">Every visit</p>
-              <h2 className="font-editorial text-5xl sm:text-6xl tracking-wide uppercase text-editorial dark:text-[#F0EBE8] mb-8">
-                What's<br />Included
+            <Reveal>
+              <p className="label mb-4">Every appointment</p>
+              <h2 className="h-section text-warm-900 dark:text-warm-100 mb-8">
+                What's always included
               </h2>
-              <div className="space-y-4">
+              <ul className="space-y-4">
                 {INCLUDES.map((item, i) => (
-                  <motion.div
+                  <motion.li
                     key={item}
-                    initial={{ opacity: 0, x: -16 }}
+                    className="flex items-center gap-4"
+                    initial={{ opacity: 0, x: -12 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex items-center gap-4"
+                    transition={{ delay: i * 0.08 }}
                   >
-                    <div className="w-7 h-7 bg-brand-600 flex items-center justify-center shrink-0">
-                      <Check size={13} className="text-white" />
+                    <div className="w-6 h-6 rounded-full bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center shrink-0">
+                      <Check size={12} className="text-brand-600 dark:text-brand-400" />
                     </div>
-                    <span className="font-body text-sm text-editorial dark:text-[#F0EBE8]">{item}</span>
-                  </motion.div>
+                    <span className="font-body text-sm text-warm-700 dark:text-warm-300">{item}</span>
+                  </motion.li>
                 ))}
-              </div>
-              <motion.button
+              </ul>
+              <button
                 onClick={() => setBookingOpen(true)}
-                whileHover={{ x: 4 }}
-                className="group mt-10 flex items-center gap-4 bg-brand-600 hover:bg-brand-700 text-white px-8 py-5 font-body text-xs font-medium tracking-widest uppercase transition-colors"
+                className="mt-10 inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-3.5 rounded-full font-body text-sm font-medium transition-colors shadow-soft group"
               >
                 Book Now
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </InView>
-            <InView delay={0.15}>
-              <div className="relative aspect-[3/4] overflow-hidden group">
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <div className="rounded-2xl overflow-hidden aspect-[3/4] hidden lg:block">
                 <img
                   src={`${BASE}images/Nails-4.png`}
                   alt="Nail artistry"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover"
                 />
               </div>
-            </InView>
+            </Reveal>
           </div>
         </div>
       </section>

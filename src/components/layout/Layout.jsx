@@ -6,9 +6,9 @@ import Footer from './Footer'
 import BookingModal from '../booking/BookingModal'
 
 const pageVariants = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
-  exit:    { opacity: 0, y: -8, transition: { duration: 0.2 } },
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+  exit:    { opacity: 0, transition: { duration: 0.2 } },
 }
 
 export default function Layout() {
@@ -16,7 +16,7 @@ export default function Layout() {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen flex flex-col bg-cream dark:bg-[#0D0808]">
+    <div className="min-h-screen flex flex-col bg-warm-50 dark:bg-warm-900">
       <Navbar onBookNow={() => setBookingOpen(true)} />
       <AnimatePresence mode="wait">
         <motion.main
